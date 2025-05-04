@@ -104,7 +104,7 @@ function App() {
     });
   
     setTimesheetRows(updatedRows);
-  }, [standardStartTime, standardEndTime, standardBreakHours, checkedDays]);
+  }, [standardStartTime, standardEndTime, standardBreakHours, checkedDays, timesheetRows]);
 
   const updateRow = (index, newRow) => {
     const updated = [...timesheetRows];
@@ -174,6 +174,10 @@ function App() {
             week1Total={totalWeek1}
             week2Total={totalWeek2}
           />
+
+          {response && (
+            <ServerResponse data={response} />
+          )}
         </div>
       </div>
     </form>
