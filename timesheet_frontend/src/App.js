@@ -78,33 +78,33 @@ function App() {
 
   // Update timesheet when standard hours or work days change
   useEffect(() => {
-
-    // Extract time and convert to decimal hours
     const parseTime = (timeStr) => {
       const [hours, minutes] = timeStr.split(":").map(Number);
       return hours + minutes / 60;
     };
-  
+
     const workStart = parseTime(standardStartTime);
     const workEnd = parseTime(standardEndTime);
     const breakHours = parseFloat(standardBreakHours || "0");
     const dailyHours = Math.max(0, workEnd - workStart - breakHours);
-  
-    // Return the updated timesheet
-    const updatedRows = timesheetRows.map((row) => {
-      const isWorkDay = checkedDays[row.dayIndex];
-      return {
-        ...row,
-        startTime: isWorkDay ? standardStartTime : "",
-        endTime: isWorkDay ? standardEndTime : "",
-        break_time: isWorkDay ? breakHours : 0,
-        hoursWorked: isWorkDay ? dailyHours : 0,
-        active: isWorkDay,
-      };
-    });
-  
-    setTimesheetRows(updatedRows);
-  }, [standardStartTime, standardEndTime, standardBreakHours, checkedDays, timesheetRows]);
+
+    setTimesheetRows((prevRows) =>
+      prevRows.map((row, i) => {
+        const isWorkDay = checkedDays[row.dayIndex];
+        if (!row.manuallyEdited) {
+          return {
+            ...row,
+            startTime: isWorkDay ? standardStartTime : "",
+            endTime: isWorkDay ? standardEndTime : "",
+            break_time: isWorkDay ? breakHours : 0,
+            hoursWorked: isWorkDay ? dailyHours : 0,
+            active: isWorkDay,
+          };
+        }
+        return row;
+      })
+    );
+  }, [standardStartTime, standardEndTime, standardBreakHours, checkedDays]);
 
   const updateRow = (index, newRow) => {
     const updated = [...timesheetRows];
@@ -114,6 +114,7 @@ function App() {
     const end = eH + eM / 60;
     const breakH = parseFloat(newRow.break_time || 0);
     newRow.hoursWorked = Math.max(0, end - start - breakH);
+    newRow.manuallyEdited = true; 
     updated[index] = newRow;
     setTimesheetRows(updated);
   };
