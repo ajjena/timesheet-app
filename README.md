@@ -2,7 +2,7 @@
 
 A simple, customizable timesheet generator with auto-fill scheduling, ad hoc edits, and PDF export. Built with FastAPI (backend) and React (frontend).
 
-**Link to project:** [https://cerulean-begonia-929d38.netlify.app/](https://cerulean-begonia-929d38.netlify.app/)
+**Link to project:** [click here](https://mytimesheetgenerator.com/)
 
 **Built with:** Python, Javascript, JSX, FastAPI, React
 
